@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gabezter4.Flower_Power.Commands.Admin.Create;
@@ -19,15 +18,15 @@ import com.gabezter4.Flower_Power.Commands.Player.Spectate;
 
 public class Main extends JavaPlugin {
 
-	Listen flowerNum = new Listen();
-	Run run = new Run();
-	Leave leave = new Leave();
-	Spectate spec = new Spectate();
-	Create create = new Create();
-	Start start = new Start();
-	Stop stop = new Stop();
-	Join join = new Join();
-	Postion pos = new Postion();
+	public Listen flowerNum = new Listen();
+	public Run run = new Run();
+	public Leave leave = new Leave();
+	public Spectate spec = new Spectate();
+	public Create create = new Create();
+	public Start start = new Start();
+	public Stop stop = new Stop();
+	public Join join = new Join();
+	public Postion pos = new Postion();
 
 	@Override
 	public void onEnable() {
