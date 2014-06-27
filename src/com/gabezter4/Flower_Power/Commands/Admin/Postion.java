@@ -19,8 +19,8 @@ public class Postion implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("fp pos 1")) {
 			if (sender.hasPermission("fp.pos1")) {
 				if (sender.hasPermission("fp.admin")) {
-					plugin.getConfig().set(args[0] + ".1.X", loc.getBlockX());
-					plugin.getConfig().set(args[0] + ".1.Z", loc.getBlockZ());
+					plugin.getConfig().set("Arena.1.X", loc.getBlockX());
+					plugin.getConfig().set("Arena.1.Z", loc.getBlockZ());
 					return true;
 				}
 			}
@@ -28,8 +28,8 @@ public class Postion implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("fb pos 2")) {
 			if (sender.hasPermission("fp.pos2")) {
 				if (sender.hasPermission("fp.admin")) {
-					plugin.getConfig().set(args[0] + ".2.X", loc.getBlockX());
-					plugin.getConfig().set(args[0] + ".2.Z", loc.getBlockZ());
+					plugin.getConfig().set("Arena.2.X", loc.getBlockX());
+					plugin.getConfig().set("Arena.2.Z", loc.getBlockZ());
 					return true;
 				}
 			}

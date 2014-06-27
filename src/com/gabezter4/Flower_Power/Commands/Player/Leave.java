@@ -19,8 +19,8 @@ public class Leave implements CommandExecutor  {
 		if(cmd.getName().equalsIgnoreCase("fp leave")){
 			if (plugin.inGame.contains(playerName)) {
 				plugin.inGame.remove(playerName);
+				plugin.join.playerCount--;
 			} else {
-
 				sender.sendMessage(ChatColor.RED + "You aren't in a game.");
 			}
 			

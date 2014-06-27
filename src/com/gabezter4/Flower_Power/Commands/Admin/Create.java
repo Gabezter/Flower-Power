@@ -13,10 +13,9 @@ public class Create implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		if (cmd.getName().equalsIgnoreCase("fp create")) {
-			plugin.getConfig().set(null, args[0]);
+			plugin.getConfig().set("Arena.Name", args[0]);
 			return true;
 		}
-
 		return false;
 	}
 

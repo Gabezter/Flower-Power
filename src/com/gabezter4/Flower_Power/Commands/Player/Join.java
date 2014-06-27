@@ -11,7 +11,7 @@ import com.gabezter4.Flower_Power.Main;
 public class Join implements CommandExecutor {
 
 	Main plugin;
-
+	int playerCount =0;
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -20,8 +20,12 @@ public class Join implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("fp join")) {
 			if (!(plugin.inGame.contains(playerName))) {
 				plugin.inGame.add(playerName);
-			} else {
-
+				playerCount++;
+				if(playerCount == 1){
+				plugin.getServer().broadcastMessage(ChatColor.GOLD + "["+ ChatColor.GREEN + "Flower Power" + ChatColor.GOLD + "] " + ChatColor.WHITE + playerName + ChatColor.RED + " has joined the "+ ChatColor.GREEN + "Flower Power" + ChatColor.RED + " arena, the arena now has " + ChatColor.GOLD + playerCount + " player.");
+			}else{
+				plugin.getServer().broadcastMessage(ChatColor.GOLD + "["+ ChatColor.GREEN + "Flower Power" + ChatColor.GOLD + "] " + ChatColor.WHITE + playerName + ChatColor.RED + " has joined the "+ ChatColor.GREEN + "Flower Power" + ChatColor.RED + " arena, the arena now has " + ChatColor.GOLD + playerCount + " players.");
+			}} else {
 				sender.sendMessage(ChatColor.RED + "You are already in game.");
 			}
 			return true;

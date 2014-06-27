@@ -1,4 +1,4 @@
-package com.gabezter4.Flower_Power.Commands.Player;
+package com.gabezter4.Flower_Power.Commands;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,24 +17,20 @@ public class Spectate implements CommandExecutor {
 			String[] args) {
 		Player player = (Player) sender;
 		if (cmd.getName().equalsIgnoreCase("fp spec")) {
-			World world = ((World) plugin.getConfig().get(
-					args[0] + ".Spec.World"));
-			Double x = plugin.getConfig().getDouble(args[0] + ".Spec.X");
-			Double y = plugin.getConfig().getDouble(args[0] + ".Spec.Y");
-			Double z = plugin.getConfig().getDouble(args[0] + ".Spec.Z");
+			World world = ((World) plugin.getConfig().get("Arena.Spec.World"));
+			Double x = plugin.getConfig().getDouble("Arena.Spec.X");
+			Double y = plugin.getConfig().getDouble("Arena.Spec.Y");
+			Double z = plugin.getConfig().getDouble("Arena.Spec.Z");
 			Location loc = new Location(world, x, y, z);
 			player.teleport(loc);
 			return true;
 		}
 		if (cmd.getName().equalsIgnoreCase("fp spec set")) {
-			plugin.getConfig().set(args[0] + ".Spec.World",
+			plugin.getConfig().set("Arena.Spec.World",
 					player.getLocation().getWorld());
-			plugin.getConfig().set(args[0] + ".Spec.X",
-					player.getLocation().getX());
-			plugin.getConfig().set(args[0] + ".Spec.Y",
-					player.getLocation().getY());
-			plugin.getConfig().set(args[0] + ".Spec.Z",
-					player.getLocation().getZ());
+			plugin.getConfig().set("Arena.Spec.X", player.getLocation().getX());
+			plugin.getConfig().set("Arena.Spec.Y", player.getLocation().getY());
+			plugin.getConfig().set("Arena.Spec.Z", player.getLocation().getZ());
 		}
 
 		return false;
