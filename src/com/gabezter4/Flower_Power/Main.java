@@ -18,7 +18,7 @@ import com.gabezter4.Flower_Power.Commands.Player.Leave;
 
 public class Main extends JavaPlugin {
 
-	public Listen flowerNum = new Listen();
+	public Listen listen = new Listen();
 	public Run run = new Run();
 	public Leave leave = new Leave();
 	public Spectate spec = new Spectate();
@@ -27,6 +27,7 @@ public class Main extends JavaPlugin {
 	public Stop stop = new Stop();
 	public Join join = new Join();
 	public Postion pos = new Postion();
+	public Flower_Gen gen = new Flower_Gen();
 
 	@Override
 	public void onEnable() {
@@ -39,6 +40,7 @@ public class Main extends JavaPlugin {
 		getCommand("fp pos 1").setExecutor(pos);
 		getCommand("fp pos 2").setExecutor(pos);
 		getCommand("fp spec set").setExecutor(spec);
+		getServer().getPluginManager().registerEvents(listen, this);
 	}
 
 	@Override
@@ -51,6 +53,10 @@ public class Main extends JavaPlugin {
 	public ArrayList<String> scored = new ArrayList<String>();
 
 	public boolean gameGoing = false;
+	
+	public int beforeTimer = 0;
+	public int gameTimer = 0;
+	public int flower = 0;
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -83,10 +89,27 @@ public class Main extends JavaPlugin {
 		return false;
 	}
 
-	
-	public int RandomNumber(int flower){
+	public int RandomNumber(int flower) {
 		Random number = new Random();
 		flower = number.nextInt(flower);
 		return flower;
 	}
+
+	public void beforeTimer(int max) {
+		if (!(beforeTimer == max)) {
+			beforeTimer++;
+		} else {
+			beforeTimer = 0;
+		}
+	}
+
+	public void gameTimer(int max) {
+		if (!(gameTimer == max)) {
+			gameTimer++;
+		} else {
+			gameTimer = 0;
+		}
+
+	}
+
 }
