@@ -1,11 +1,15 @@
 package com.gabezter4.Flower_Power;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gabezter4.Flower_Power.Commands.Spectate;
@@ -28,6 +32,10 @@ public class Main extends JavaPlugin {
 	public Join join = new Join();
 	public Postion pos = new Postion();
 	public Flower_Gen gen = new Flower_Gen();
+	public ScoreBoards sb = new ScoreBoards();
+
+	public File config = null;
+	public FileConfiguration nc = null;
 
 	@Override
 	public void onEnable() {
@@ -41,6 +49,20 @@ public class Main extends JavaPlugin {
 		getCommand("fp pos 2").setExecutor(pos);
 		getCommand("fp spec set").setExecutor(spec);
 		getServer().getPluginManager().registerEvents(listen, this);
+
+		this.config = new File(this.getDataFolder(), "config.yml");
+		this.nc = YamlConfiguration.loadConfiguration(config);
+
+		if (!config.exists()) {
+			this.getLogger().info("Gernerating the config.yml file...");
+			nc.addDefault("Arena", "");
+			nc.options().copyDefaults(true);
+			try {
+				nc.save(config);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -53,10 +75,14 @@ public class Main extends JavaPlugin {
 	public ArrayList<String> scored = new ArrayList<String>();
 
 	public boolean gameGoing = false;
-	
+	public boolean roundGoing = false;
+	public boolean gameEnd = false;
+
 	public int beforeTimer = 0;
 	public int gameTimer = 0;
 	public int flower = 0;
+
+	public int rounds = 1;
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -96,18 +122,30 @@ public class Main extends JavaPlugin {
 	}
 
 	public void beforeTimer(int max) {
-		if (!(beforeTimer == max)) {
+		while (!(beforeTimer == max) && (roundGoing = false)) {
 			beforeTimer++;
-		} else {
-			beforeTimer = 0;
+			if (beforeTimer == max) {
+				beforeTimer = 0;
+				roundGoing = true;
+
+			}
 		}
 	}
 
 	public void gameTimer(int max) {
-		if (!(gameTimer == max)) {
+		while (!(gameTimer == max) && (roundGoing = true)) {
 			gameTimer++;
-		} else {
-			gameTimer = 0;
+			if (gameTimer == max) {
+				gameTimer = 0;
+				roundGoing = false;
+				rounds++;
+				if(rounds==6){
+					gameGoing = false;
+					gameEnd = true;
+					rounds = 1;
+				}
+			
+			}
 		}
 
 	}

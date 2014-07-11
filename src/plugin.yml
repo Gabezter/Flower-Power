@@ -1,0 +1,103 @@
+name: Flower-Power
+version: BETA
+main: com.gabezter4.Flower_Power.Main
+commands:
+  fp leave:
+    description: Leaves current 
+    usage: /fp leave
+  fp spec:
+    description: Spectates Arena
+    usage: /fp spec
+  fp create:
+    description: Names Arena
+    usage: /fp create [name]
+  fp start:
+    description: Starts Match
+    usage: /fp start
+  fp join:
+    description: Join Match
+    usage: /fp join
+  fp pos 1:
+    description: Sets Postion 1
+    usage: /fp pos 1
+  fp pos 2:
+    description: Sets Postion 2
+    usage: /fp pos 2
+  fp spec set:
+    description: Set Specators spawn
+    usage: /fp spec set
+  fp ahelp:
+    description: Admin Help
+    usage: /fp ahelp
+  fp:
+    description: Main Command
+    usage: /fp
+  fp help:
+    description: Player Help Page
+    usage: /fp help
+permissions:
+  fp.leave:
+    description: Leave Command
+    default: not op
+  fp.join:
+    description: Join Command
+    default: not op
+  fp.spec:
+    description: Spec Command
+    default: not op
+  fp.create:
+    description: create Command
+    default: op
+  fp.start:
+    description: Start Command
+    default: op
+  fp.pos:
+    description: Pos Commands
+    default: op
+  fp.spec.set:
+    description: Spec Set Command
+    default: op
+  fp.main:
+    description: Main Command
+    default: not op
+  fp.ahelp:
+    description: Admin Help Command
+    default: op
+  fp.help:
+    description: Help Command
+    default: not op
+  fp.stop:
+    description: Stop Command
+    default: op
+  fp.admin:
+    description: All Admin Commands
+    default: op
+    children:
+      fp.start: true
+      fp.stop: true
+      fp.leave: true
+      fp.join: true
+      fp.spec: true
+      fp.create: true
+      fp.pos: true
+      fp.stop: true
+      fp.spec.set: true
+      fp.main: true
+      fp.ahelp: true
+      fp.help: true
+  fp.player:
+    description: All Player Commands
+    default: not op
+    children:
+      fp.start: false
+      fp.stop: false
+      fp.leave: true
+      fp.join: true
+      fp.spec: true
+      fp.create: false
+      fp.pos: false
+      fp.stop: false
+      fp.spec.set: false
+      fp.main: true
+      fp.ahelp: false
+      fp.help: true
