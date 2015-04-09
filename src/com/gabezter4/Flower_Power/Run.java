@@ -11,24 +11,20 @@ public class Run extends BukkitRunnable {
 
 	Main plugin;
 
-	public Run() {
-		run();
+	public Run(Main plugin) {
+		this.plugin = plugin;
 	}
 
 	Player player;
-	String playerName = player.getName();
-	public int a = plugin.RandomNumber(14);
 
 	@Override
 	public void run() {
-		if (plugin.gameGoing = false) {
-			if (plugin.gameEnd = false) {
-				while (plugin.inGame.size() < plugin.getConfig().getInt(
-						"Player amount before autoStart")) {
-					BukkitTask task = new MessageBroadCast().runTaskLater(
-							this.plugin, 1200);
-					plugin.sb.ScoreBoard(player);
-				}
+		if (plugin.gameGoing == false && plugin.gameEnd == false) {
+			while (plugin.inGame.size() < plugin.getConfig().getInt(
+					"Player amount before autoStart")) {
+				BukkitTask task = new MessageBroadCast().runTaskLater(
+						this.plugin, 1200);
+				plugin.sb.ScoreBoard(player);
 			}
 		}
 		if (plugin.gameGoing = true && (plugin.gameEnd = false)) {
@@ -42,10 +38,12 @@ public class Run extends BukkitRunnable {
 				plugin.gameTimer(plugin.getConfig().getInt(
 						"Time for each round(in seconds)") * 20);
 
+				String playerName = player.getName();
 				if (plugin.inGame.contains(playerName)) {
+
 					plugin.playing.add(plugin.inGame.toString());
 					while (plugin.roundGoing = true) {
-						if (a == 0) {
+						if (plugin.a == 0) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -56,7 +54,7 @@ public class Run extends BukkitRunnable {
 							plugin.gen.arena();
 
 						}
-						if (a == 1) {
+						if (plugin.a == 1) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -66,7 +64,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 2;
 							plugin.gen.arena();
 						}
-						if (a == 2) {
+						if (plugin.a == 2) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -76,7 +74,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 3;
 							plugin.gen.arena();
 						}
-						if (a == 3) {
+						if (plugin.a == 3) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -86,7 +84,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 4;
 							plugin.gen.arena();
 						}
-						if (a == 4) {
+						if (plugin.a == 4) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -96,7 +94,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 5;
 							plugin.gen.arena();
 						}
-						if (a == 5) {
+						if (plugin.a == 5) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -106,7 +104,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 6;
 							plugin.gen.arena();
 						}
-						if (a == 6) {
+						if (plugin.a == 6) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -116,7 +114,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 7;
 							plugin.gen.arena();
 						}
-						if (a == 7) {
+						if (plugin.a == 7) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -126,7 +124,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 8;
 							plugin.gen.arena();
 						}
-						if (a == 8) {
+						if (plugin.a == 8) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -136,7 +134,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 9;
 							plugin.gen.arena();
 						}
-						if (a == 9) {
+						if (plugin.a == 9) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -146,7 +144,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 10;
 							plugin.gen.arena();
 						}
-						if (a == 10) {
+						if (plugin.a == 10) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -156,7 +154,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 11;
 							plugin.gen.arena();
 						}
-						if (a == 11) {
+						if (plugin.a == 11) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -166,7 +164,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 12;
 							plugin.gen.arena();
 						}
-						if (a == 12) {
+						if (plugin.a == 12) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED
@@ -176,7 +174,7 @@ public class Run extends BukkitRunnable {
 							plugin.flower = 13;
 							plugin.gen.arena();
 						}
-						if (a == 13) {
+						if (plugin.a == 13) {
 							player.sendMessage(ChatColor.RED + "["
 									+ ChatColor.GREEN + "Flower Power"
 									+ ChatColor.RED + "] " + ChatColor.RED

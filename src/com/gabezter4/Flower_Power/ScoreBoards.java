@@ -17,16 +17,16 @@ public class ScoreBoards {
 	ScoreboardManager manager = Bukkit.getScoreboardManager();
 	Scoreboard board = manager.getNewScoreboard();
 	Team team = board.registerNewTeam("Flower Points");
-	Objective objective = board.registerNewObjective("points", "null");
+	Objective objective = board.registerNewObjective("points", "dummy");
 	Score score;
-	Score time = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + "Time Left - " + (plugin.gameTimer/20) + " seconds"));
+	Score time = objective.getScore(ChatColor.GREEN + "Time:");
 
 	public void ScoreBoard(Player player) {
 		objective.setDisplayName("Flower Points");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		team.setAllowFriendlyFire(false);
 		team.addPlayer(player);
-		score = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.RED + player.getName()));
+		score = objective.getScore(Bukkit.getPlayer(player.getName()));
 		score.setScore(0);
 		time.setScore(-1);
 
