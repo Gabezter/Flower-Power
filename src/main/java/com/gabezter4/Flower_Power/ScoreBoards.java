@@ -16,27 +16,34 @@ public class ScoreBoards {
 
 	ScoreboardManager manager;
 	Scoreboard board;
-	Team team;
+	Team playTeam;
+	Team doneTeam;
 	Objective objective;
 	Score score;
 	Score time;
 
 	public void ScoreBoard(Player player) {
 
+
+			playTeam.addPlayer(player);
+			playTeam.setPrefix(ChatColor.BLUE + "");
 			time = objective.getScore(ChatColor.GREEN + "Time:");
 			score = objective.getScore(player.getName());
-			score.setScore(0);
+			player.setScoreboard(board);
+			score.setScore(1);
 			time.setScore(15);
-		
+			
+
+
 	}
 
 	public void setupScoreboard() {
-
 		manager = Bukkit.getScoreboardManager();
 		board = manager.getNewScoreboard();
+		playTeam = board.registerNewTeam("Playing");
+		doneTeam = board.registerNewTeam("Done");
 		objective = board.registerNewObjective("points", "dummy");
-		objective.setDisplayName(ChatColor.WHITE + "Flower Points");
+		objective.setDisplayName("Flower Power Points");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 	}
 }

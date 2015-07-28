@@ -15,27 +15,27 @@ public class Flower_Gen {
 		int may = 255;
 		int miy = 0;
 
-		if (plugin.b.getConfig().getInt("Arena.1.X") < plugin.b.getConfig().getInt(
-				"Arena.2.X")) {
-			mix = plugin.b.getConfig().getInt("Arena.1.X");
-			max = plugin.b.getConfig().getInt("Arena.2.X");
+		if (plugin.b.getConfig().getInt("Arena.Pos1.X") < plugin.b.getConfig()
+				.getInt("Arena.Pos2.X")) {
+			mix = plugin.b.getConfig().getInt("Arena.Pos1.X");
+			max = plugin.b.getConfig().getInt("Arena.Pos2.X");
 		} else {
-			max = plugin.b.getConfig().getInt("Arena.1.X");
-			mix = plugin.b.getConfig().getInt("Arena.2.X");
+			max = plugin.b.getConfig().getInt("Arena.Pos1.X");
+			mix = plugin.b.getConfig().getInt("Arena.Pos2.X");
 		}
-		if (plugin.b.getConfig().getInt("Arena.1.Z") < plugin.b.getConfig().getInt(
-				"Arena.2.Z")) {
-			miz = plugin.b.getConfig().getInt("Arena.1.Z");
-			maz = plugin.b.getConfig().getInt("Arena.2.Z");
+		if (plugin.b.getConfig().getInt("Arena.Pos1.Z") < plugin.b.getConfig()
+				.getInt("Arena.Pos2.Z")) {
+			miz = plugin.b.getConfig().getInt("Arena.Pos1.Z");
+			maz = plugin.b.getConfig().getInt("Arena.Pos2.Z");
 		} else {
-			maz = plugin.b.getConfig().getInt("Arena.1.Z");
-			miz = plugin.b.getConfig().getInt("Arena.2.Z");
+			maz = plugin.b.getConfig().getInt("Arena.Pos1.Z");
+			miz = plugin.b.getConfig().getInt("Arena.Pos2.Z");
 		}
 		World w = (World) plugin.b.getConfig().get("Arena.World");
 		for (int x1 = mix; x1 < max; x1++) {
 			for (int y1 = miy; y1 < may; y1++) {
 				for (int z1 = miz; z1 < maz; z1++) {
-					Location loc = new Location(w, x1, y1, z1);
+					Location loc = new Location(w, (double)x1, (double)y1, (double)z1);
 
 					Random number = new Random();
 					int a = number.nextInt(14);
@@ -123,27 +123,27 @@ public class Flower_Gen {
 		int may = 255;
 		int miy = 0;
 
-		if (plugin.b.getConfig().getInt("Arena.1.X") < plugin.b.getConfig().getInt(
-				"Arena.2.X")) {
-			mix = plugin.b.getConfig().getInt("Arena.1.X");
-			max = plugin.b.getConfig().getInt("Arena.2.X");
+		if (plugin.b.getConfig().getInt("Arena.'1'.X") < plugin.b.getConfig()
+				.getInt("Arena.'2'.X")) {
+			mix = plugin.b.getConfig().getInt("Arena.'1'.X");
+			max = plugin.b.getConfig().getInt("Arena.'2'.X");
 		} else {
-			max = plugin.b.getConfig().getInt("Arena.1.X");
-			mix = plugin.b.getConfig().getInt("Arena.2.X");
+			max = plugin.b.getConfig().getInt("Arena.'1'.X");
+			mix = plugin.b.getConfig().getInt("Arena.'2'.X");
 		}
-		if (plugin.b.getConfig().getInt("Arena.1.Z") < plugin.b.getConfig().getInt(
-				"Arena.2.Z")) {
-			miz = plugin.b.getConfig().getInt("Arena.1.Z");
-			maz = plugin.b.getConfig().getInt("Arena.2.Z");
+		if (plugin.b.getConfig().getInt("Arena.'1'.Z") < plugin.b.getConfig()
+				.getInt("Arena.'2'.Z")) {
+			miz = plugin.b.getConfig().getInt("Arena.'1'.Z");
+			maz = plugin.b.getConfig().getInt("Arena.'2'.Z");
 		} else {
-			maz = plugin.b.getConfig().getInt("Arena.1.Z");
-			miz = plugin.b.getConfig().getInt("Arena.2.Z");
+			maz = plugin.b.getConfig().getInt("Arena.'1'.Z");
+			miz = plugin.b.getConfig().getInt("Arena.'2'.Z");
 		}
 		World w = (World) plugin.b.getConfig().get("Arena.World");
 		for (int x1 = mix; x1 < max; x1++) {
 			for (int y1 = miy; y1 < may; y1++) {
 				for (int z1 = miz; z1 < maz; z1++) {
-					Location loc = new Location(w, x1, y1, z1);
+					Location loc = new Location(w, (double)x1, (double)y1, (double)z1);
 					if (loc.getBlock().getTypeId() == 175) {
 						loc.getBlock().setType(Material.AIR);
 					}

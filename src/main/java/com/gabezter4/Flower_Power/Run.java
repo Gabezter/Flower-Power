@@ -30,8 +30,7 @@ public class Run extends BukkitRunnable {
 		if (plugin.gameGoing = true && (plugin.gameEnd = false)) {
 
 			for (int i = 0; i > plugin.inGame.size(); i++) {
-				String[] sf = (String[]) plugin.inGame.toArray();
-				player = Bukkit.getServer().getPlayer(sf[i]);
+				player = plugin.inGame.get(i);
 				plugin.sb.ScoreBoard(player);
 				player.setScoreboard(plugin.sb.board);
 			}
@@ -45,10 +44,8 @@ public class Run extends BukkitRunnable {
 				plugin.gameTimer(plugin.getConfig().getInt(
 						"Time for each round(in seconds)") * 20);
 
-				String playerName = player.getName();
-				if (plugin.inGame.contains(playerName)) {
-
-					plugin.playing.add(plugin.inGame.toString());
+				
+				if (plugin.inGame.contains(player)) {
 					while (plugin.roundGoing = true) {
 						if (plugin.a == 0) {
 							player.sendMessage(ChatColor.RED + "["

@@ -1,7 +1,11 @@
 package com.gabezter4.Flower_Power;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,6 +13,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,11 +24,9 @@ public class Main extends JavaPlugin {
 	public Run run = new Run(this);
 	public Flower_Gen gen = new Flower_Gen();
 	public ScoreBoards sb = new ScoreBoards();
-	public ConfigAccessor b = new ConfigAccessor(this, "arena.yml");
-	
-	public ArrayList<String> inGame = new ArrayList<String>();
-	public ArrayList<String> playing = new ArrayList<String>();
-	public ArrayList<String> scored = new ArrayList<String>();
+	ConfigAccessor b = new ConfigAccessor(this, "arena.yml");
+
+	public ArrayList<Player> inGame = new ArrayList<Player>();
 
 	public boolean gameGoing = false;
 	public boolean roundGoing = false;
@@ -30,7 +34,7 @@ public class Main extends JavaPlugin {
 
 	public int beforeTimer = 0;
 	public int gameTimer = 0;
-	public int flower = 0;
+	public int flower = 1;
 	int playerCount = 0;
 	public int rounds = 1;
 	public int a = RandomNumber(14);
@@ -42,20 +46,20 @@ public class Main extends JavaPlugin {
 		b.saveDefaultConfig();
 		this.saveDefaultConfig();
 		sb.setupScoreboard();
-	//	getServer().getPluginManager().registerEvents(listen, this);
+		getServer().getPluginManager().registerEvents(listen, this);
 	}
 
 	@Override
 	public void onDisable() {
 		inGame.clear();
-	}
+		sb.doneTeam.unregister();
+		sb.playTeam.unregister();
 
-	
+	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		Player player = (Player) sender;
-		String playerName = player.getName();
 		if (cmd.getName().equalsIgnoreCase("fp")) {
 			if (args.length == 0) {
 				if (sender.hasPermission("fp.main")
@@ -75,7 +79,7 @@ public class Main extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED
 							+ "/fp create [name] - Creates the arena name.");
 					sender.sendMessage(ChatColor.RED
-							+ "/fp setPos [1/2]  - Sets a corner of the areana");
+							+ "/fp setPos [1/2]  - Sets a corner of the Arena");
 					sender.sendMessage(ChatColor.RED
 							+ "/fp stop          - Stops the game");
 					sender.sendMessage(ChatColor.RED
@@ -138,9 +142,9 @@ public class Main extends JavaPlugin {
 								"Arena.World",
 								player.getLocation().getWorld().getName()
 										.toString());
-						b.getConfig().set("Arena.1.X",
+						b.getConfig().set("Arena.Pos1.X",
 								player.getLocation().getBlockX());
-						b.getConfig().set("Arena.1.Z",
+						b.getConfig().set("Arena.Pos1.Z",
 								player.getLocation().getBlockZ());
 						sender.sendMessage(title + ChatColor.RED + "X:"
 								+ player.getLocation().getBlockX() + " Z:"
@@ -156,9 +160,9 @@ public class Main extends JavaPlugin {
 								"Arena.World",
 								player.getLocation().getWorld().getName()
 										.toString());
-						b.getConfig().set("Arena.2.X",
+						b.getConfig().set("Arena.Pos2.X",
 								player.getLocation().getBlockX());
-						b.getConfig().set("Arena.2.Z",
+						b.getConfig().set("Arena.Pos2.Z",
 								player.getLocation().getBlockZ());
 						sender.sendMessage(title + ChatColor.RED + "X:"
 								+ player.getLocation().getBlockX() + " Z:"
@@ -193,13 +197,12 @@ public class Main extends JavaPlugin {
 				}
 			}
 			if (args[0].equalsIgnoreCase("spec")) {
-				if (args.length == 1 || !(inGame.contains(playerName))) {
+				if (args.length == 1 || !(inGame.contains(player))) {
 					if (sender.hasPermission("fp.spec")
 							|| sender.hasPermission("fp.admin")
 							|| sender.hasPermission("fp.player")) {
-						String worldn = b.getConfig().getString(
-								"Arena.Spec.World");
-						World world = Bukkit.getServer().getWorld(worldn);
+						World world = Bukkit.getServer().getWorld(
+								b.getConfig().getString("Arena.Spec.World"));
 						Double x = b.getConfig().getDouble("Arena.Spec.X");
 						Double y = b.getConfig().getDouble("Arena.Spec.Y");
 						Double z = b.getConfig().getDouble("Arena.Spec.Z");
@@ -207,8 +210,7 @@ public class Main extends JavaPlugin {
 						player.teleport(loc);
 						return true;
 					}
-				}
-				if (args[1].equalsIgnoreCase("set")) {
+				} else if (args[1].equalsIgnoreCase("set")) {
 					if (sender.hasPermission("fp.spec.set")
 							|| sender.hasPermission("fp.admin")) {
 						b.getConfig().set(
@@ -231,20 +233,19 @@ public class Main extends JavaPlugin {
 				if (sender.hasPermission("fp.join")
 						|| sender.hasPermission("fp.admin")
 						|| sender.hasPermission("fp.player")) {
-					if (!(inGame.contains(playerName))) {
-						String worldn = b.getConfig().getString(
-								"Arena.Spec.World");
-						World world = Bukkit.getServer().getWorld(worldn);
+					if (!(inGame.contains(player))) {
+						World world = Bukkit.getServer().getWorld(
+								b.getConfig().getString("Arena.Spec.World"));
 						Double x = b.getConfig().getDouble("Arena.Spec.X");
 						Double y = b.getConfig().getDouble("Arena.Spec.Y");
 						Double z = b.getConfig().getDouble("Arena.Spec.Z");
 						Location loc = new Location(world, x, y, z);
 						player.teleport(loc);
-						inGame.add(playerName);
+						inGame.add(player);
 						playerCount++;
 						if (playerCount == 1) {
 							getServer().broadcastMessage(
-									title + ChatColor.WHITE + playerName
+									title + ChatColor.WHITE + player
 											+ ChatColor.RED
 											+ " has joined the "
 											+ ChatColor.GREEN + "Flower Power"
@@ -254,7 +255,7 @@ public class Main extends JavaPlugin {
 											+ " player.");
 						} else {
 							getServer().broadcastMessage(
-									title + ChatColor.WHITE + playerName
+									title + ChatColor.WHITE + player
 											+ ChatColor.RED
 											+ " has joined the "
 											+ ChatColor.GREEN + "Flower Power"
@@ -274,10 +275,10 @@ public class Main extends JavaPlugin {
 				if (sender.hasPermission("fp.leave")
 						|| sender.hasPermission("fp.admin")
 						|| sender.hasPermission("fp.player")) {
-					if (inGame.contains(playerName)) {
+					if (inGame.contains(player)) {
 						sender.sendMessage(title + ChatColor.RED
 								+ "You have left the game.");
-						inGame.remove(playerName);
+						inGame.remove(player);
 						playerCount--;
 					} else {
 						sender.sendMessage(ChatColor.RED
@@ -288,11 +289,14 @@ public class Main extends JavaPlugin {
 				}
 			}
 
-		
-		if(args[0].equalsIgnoreCase("test")){
-			this.gen.arena();
-			return true;}
-}
+			if (args[0].equalsIgnoreCase("test")) {
+				sender.sendMessage(ChatColor.RED + sb.playTeam.getPlayers().toString());
+				this.inGame.add(player);
+				this.sb.ScoreBoard(player);
+				sender.sendMessage(ChatColor.GOLD + "HEY BITCH!!");
+				return true;
+			}
+		}
 		return false;
 
 	}
@@ -330,6 +334,67 @@ public class Main extends JavaPlugin {
 			}
 		}
 
+	}
+
+}
+
+class ConfigAccessor {
+
+	private final String fileName;
+	private final JavaPlugin plugin;
+
+	private File configFile;
+	private FileConfiguration fileConfiguration;
+
+	public ConfigAccessor(JavaPlugin plugin, String fileName) {
+		if (plugin == null)
+			throw new IllegalArgumentException("plugin cannot be null");
+		if (!plugin.isInitialized())
+			throw new IllegalArgumentException("plugin must be initialized");
+		this.plugin = plugin;
+		this.fileName = fileName;
+		File dataFolder = plugin.getDataFolder();
+		if (dataFolder == null)
+			throw new IllegalStateException();
+		this.configFile = new File(plugin.getDataFolder(), fileName);
+	}
+
+	public void reloadConfig() {
+		fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
+
+		// Look for defaults in the jar
+		InputStream defConfigStream = plugin.getResource(fileName);
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration
+					.loadConfiguration(defConfigStream);
+			fileConfiguration.setDefaults(defConfig);
+		}
+	}
+
+	public FileConfiguration getConfig() {
+		if (fileConfiguration == null) {
+			this.reloadConfig();
+		}
+		return fileConfiguration;
+	}
+
+	public void saveConfig() {
+		if (fileConfiguration == null || configFile == null) {
+			return;
+		} else {
+			try {
+				getConfig().save(configFile);
+			} catch (IOException ex) {
+				plugin.getLogger().log(Level.SEVERE,
+						"Could not save config to " + configFile, ex);
+			}
+		}
+	}
+
+	public void saveDefaultConfig() {
+		if (!configFile.exists()) {
+			this.plugin.saveResource(fileName, false);
+		}
 	}
 
 }
