@@ -1,17 +1,14 @@
 package com.gabezter4.Flower_Power;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,34 +18,8 @@ public class Main extends JavaPlugin {
 	public Run run = new Run(this);
 	public Flower_Gen gen = new Flower_Gen();
 	public ScoreBoards sb = new ScoreBoards();
-
-	public File config = null;
-	public FileConfiguration nc = null;
-
-	@Override
-	public void onEnable() {
-
-		this.config = new File(this.getDataFolder(), "config.yml");
-		this.nc = YamlConfiguration.loadConfiguration(config);
-
-		if (!config.exists()) {
-			this.getLogger().info("Gernerating the config.yml file...");
-			nc.addDefault("Arena", "");
-			nc.options().copyDefaults(true);
-			try {
-				nc.save(config);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public ConfigAccessor b = new ConfigAccessor(this, "arena.yml");
 	
-	}
-
-	@Override
-	public void onDisable() {
-
-	}
-
 	public ArrayList<String> inGame = new ArrayList<String>();
 	public ArrayList<String> playing = new ArrayList<String>();
 	public ArrayList<String> scored = new ArrayList<String>();
@@ -66,9 +37,25 @@ public class Main extends JavaPlugin {
 
 	public String title = ChatColor.AQUA + "[Flower Power] ";
 
+	@Override
+	public void onEnable() {
+		b.saveDefaultConfig();
+		this.saveDefaultConfig();
+		sb.setupScoreboard();
+	//	getServer().getPluginManager().registerEvents(listen, this);
+	}
+
+	@Override
+	public void onDisable() {
+		inGame.clear();
+	}
+
+	
+
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
 		Player player = (Player) sender;
+		String playerName = player.getName();
 		if (cmd.getName().equalsIgnoreCase("fp")) {
 			if (args.length == 0) {
 				if (sender.hasPermission("fp.main")
@@ -124,7 +111,7 @@ public class Main extends JavaPlugin {
 						|| sender.hasPermission("fp.admin")) {
 					getServer().broadcastMessage(
 							title + ChatColor.RED
-									+ "Flower Power has started in the Anrea");
+									+ "Flower Power has started in the Arena!");
 					run.run();
 					return true;
 				}
@@ -147,30 +134,36 @@ public class Main extends JavaPlugin {
 				if (args[1].equalsIgnoreCase("1")) {
 					if (sender.hasPermission("fp.pos1")
 							|| sender.hasPermission("fp.admin")) {
-						getConfig().set("Arena.World",
-								player.getLocation().getWorld());
-						getConfig().set("Arena.1.X",
-								player.getLocation().getX());
-						getConfig().set("Arena.1.Z",
-								player.getLocation().getZ());
+						b.getConfig().set(
+								"Arena.World",
+								player.getLocation().getWorld().getName()
+										.toString());
+						b.getConfig().set("Arena.1.X",
+								player.getLocation().getBlockX());
+						b.getConfig().set("Arena.1.Z",
+								player.getLocation().getBlockZ());
 						sender.sendMessage(title + ChatColor.RED + "X:"
 								+ player.getLocation().getBlockX() + " Z:"
 								+ player.getLocation().getBlockZ());
+						b.saveConfig();
 						return true;
 					}
 				}
 				if (args[1].equalsIgnoreCase("2")) {
 					if (sender.hasPermission("fp.pos2")
 							|| sender.hasPermission("fp.admin")) {
-						getConfig().set("Arena.World",
-								player.getLocation().getWorld());
-						getConfig().set("Arena.2.X",
+						b.getConfig().set(
+								"Arena.World",
+								player.getLocation().getWorld().getName()
+										.toString());
+						b.getConfig().set("Arena.2.X",
 								player.getLocation().getBlockX());
-						getConfig().set("Arena.2.Z",
+						b.getConfig().set("Arena.2.Z",
 								player.getLocation().getBlockZ());
 						sender.sendMessage(title + ChatColor.RED + "X:"
 								+ player.getLocation().getBlockX() + " Z:"
 								+ player.getLocation().getBlockZ());
+						b.saveConfig();
 						return true;
 					}
 
@@ -191,20 +184,25 @@ public class Main extends JavaPlugin {
 				}
 				if (sender.hasPermission("fp.create")
 						|| sender.hasPermission("fp.admin")) {
-					getConfig().set("Arena.Name", args[1]);
+					b.getConfig().set("Arena.Name", args[1]);
+					sender.sendMessage(title + ChatColor.RED
+							+ "You've created the Arena named: "
+							+ args[1].toString());
+					b.saveConfig();
 					return true;
 				}
 			}
 			if (args[0].equalsIgnoreCase("spec")) {
-				if (args.length == 1) {
+				if (args.length == 1 || !(inGame.contains(playerName))) {
 					if (sender.hasPermission("fp.spec")
 							|| sender.hasPermission("fp.admin")
 							|| sender.hasPermission("fp.player")) {
-						World world = ((World) getConfig().get(
-								"Arena.Spec.World"));
-						Double x = getConfig().getDouble("Arena.Spec.X");
-						Double y = getConfig().getDouble("Arena.Spec.Y");
-						Double z = getConfig().getDouble("Arena.Spec.Z");
+						String worldn = b.getConfig().getString(
+								"Arena.Spec.World");
+						World world = Bukkit.getServer().getWorld(worldn);
+						Double x = b.getConfig().getDouble("Arena.Spec.X");
+						Double y = b.getConfig().getDouble("Arena.Spec.Y");
+						Double z = b.getConfig().getDouble("Arena.Spec.Z");
 						Location loc = new Location(world, x, y, z);
 						player.teleport(loc);
 						return true;
@@ -213,23 +211,35 @@ public class Main extends JavaPlugin {
 				if (args[1].equalsIgnoreCase("set")) {
 					if (sender.hasPermission("fp.spec.set")
 							|| sender.hasPermission("fp.admin")) {
-						getConfig().set("Arena.Spec.World",
-								player.getLocation().getWorld());
-						getConfig().set("Arena.Spec.X",
-								player.getLocation().getX());
-						getConfig().set("Arena.Spec.Y",
-								player.getLocation().getY());
-						getConfig().set("Arena.Spec.Z",
-								player.getLocation().getZ());
+						b.getConfig().set(
+								"Arena.Spec.World",
+								player.getLocation().getWorld().getName()
+										.toString());
+						b.getConfig().set("Arena.Spec.X",
+								player.getLocation().getBlockX());
+						b.getConfig().set("Arena.Spec.Y",
+								player.getLocation().getBlockY());
+						b.getConfig().set("Arena.Spec.Z",
+								player.getLocation().getBlockZ());
+						b.saveConfig();
+						return true;
 					}
 				}
 			}
-			String playerName = player.getName();
-			if (args[0].equalsIgnoreCase("fp join")) {
+
+			if (args[0].equalsIgnoreCase("join")) {
 				if (sender.hasPermission("fp.join")
 						|| sender.hasPermission("fp.admin")
 						|| sender.hasPermission("fp.player")) {
 					if (!(inGame.contains(playerName))) {
+						String worldn = b.getConfig().getString(
+								"Arena.Spec.World");
+						World world = Bukkit.getServer().getWorld(worldn);
+						Double x = b.getConfig().getDouble("Arena.Spec.X");
+						Double y = b.getConfig().getDouble("Arena.Spec.Y");
+						Double z = b.getConfig().getDouble("Arena.Spec.Z");
+						Location loc = new Location(world, x, y, z);
+						player.teleport(loc);
 						inGame.add(playerName);
 						playerCount++;
 						if (playerCount == 1) {
@@ -260,7 +270,7 @@ public class Main extends JavaPlugin {
 					return true;
 				}
 			}
-			if (args[0].equalsIgnoreCase("fp leave")) {
+			if (args[0].equalsIgnoreCase("leave")) {
 				if (sender.hasPermission("fp.leave")
 						|| sender.hasPermission("fp.admin")
 						|| sender.hasPermission("fp.player")) {
@@ -277,12 +287,12 @@ public class Main extends JavaPlugin {
 					return true;
 				}
 			}
-			if(args[0].equalsIgnoreCase("test")){
-				sender.sendMessage(Integer.toString(a));
-			}
 
-		}
-
+		
+		if(args[0].equalsIgnoreCase("test")){
+			this.gen.arena();
+			return true;}
+}
 		return false;
 
 	}

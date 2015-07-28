@@ -28,7 +28,14 @@ public class Run extends BukkitRunnable {
 			}
 		}
 		if (plugin.gameGoing = true && (plugin.gameEnd = false)) {
-			plugin.sb.ScoreBoard(player);
+
+			for (int i = 0; i > plugin.inGame.size(); i++) {
+				String[] sf = (String[]) plugin.inGame.toArray();
+				player = Bukkit.getServer().getPlayer(sf[i]);
+				plugin.sb.ScoreBoard(player);
+				player.setScoreboard(plugin.sb.board);
+			}
+
 			if (plugin.roundGoing = false) {
 				plugin.beforeTimer(plugin.getConfig().getInt(
 						"Between Round Timer") * 20);
@@ -191,8 +198,9 @@ public class Run extends BukkitRunnable {
 		}
 		if (plugin.gameEnd = true) {
 			if (plugin.inGame.contains(player.getName())) {
-				Location world = Bukkit.getServer()
-						.getWorld(plugin.nc.getString("Arena.World"))
+				Location world = Bukkit
+						.getServer()
+						.getWorld(plugin.b.getConfig().getString("Arena.World"))
 						.getSpawnLocation();
 				player.teleport(world);
 			}

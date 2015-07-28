@@ -11,24 +11,32 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
 public class ScoreBoards {
-	
+
 	Main plugin;
 
-	ScoreboardManager manager = Bukkit.getScoreboardManager();
-	Scoreboard board = manager.getNewScoreboard();
-	Team team = board.registerNewTeam("Flower Points");
-	Objective objective = board.registerNewObjective("points", "dummy");
+	ScoreboardManager manager;
+	Scoreboard board;
+	Team team;
+	Objective objective;
 	Score score;
-	Score time = objective.getScore(ChatColor.GREEN + "Time:");
+	Score time;
 
 	public void ScoreBoard(Player player) {
-		objective.setDisplayName("Flower Points");
-		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		team.setAllowFriendlyFire(false);
-		team.addPlayer(player);
-		score = objective.getScore(Bukkit.getPlayer(player.getName()));
-		score.setScore(0);
-		time.setScore(-1);
 
+			time = objective.getScore(ChatColor.GREEN + "Time:");
+			score = objective.getScore(player.getName());
+			score.setScore(0);
+			time.setScore(15);
+		
+	}
+
+	public void setupScoreboard() {
+
+		manager = Bukkit.getScoreboardManager();
+		board = manager.getNewScoreboard();
+		objective = board.registerNewObjective("points", "dummy");
+		objective.setDisplayName(ChatColor.WHITE + "Flower Points");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
 	}
 }

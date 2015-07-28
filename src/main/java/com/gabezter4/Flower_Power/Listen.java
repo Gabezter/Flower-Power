@@ -10,30 +10,31 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class Listen implements Listener {
 
 	Main plugin;
-
+	
+	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
-		if (plugin.inGame.contains(e.getPlayer().getName())) {
-			if (plugin.nc.getConfigurationSection("Arnea") != null) {
-				if (e.getPlayer().getLocation().getBlockX() == plugin.nc
-						.getDouble("Arnea.1.X")) {
+		if (!(plugin.inGame.contains(e.getPlayer().getName()))) {
+			e.setCancelled(false);
+		} else {
+			if (plugin.b.getConfig().getConfigurationSection("Arnea") != null) {
+				if (e.getPlayer().getLocation().getBlockX() == plugin.b
+						.getConfig().getDouble("Arnea.1.X")) {
 					e.setCancelled(true);
 				}
-				if (e.getPlayer().getLocation().getBlockX() == plugin.nc
-						.getDouble("Arnea.2.X")) {
+				if (e.getPlayer().getLocation().getBlockX() == plugin.b
+						.getConfig().getDouble("Arnea.2.X")) {
 					e.setCancelled(true);
 				}
-				if (e.getPlayer().getLocation().getBlockZ() == plugin.nc
-						.getDouble("Arnea.1.Z")) {
+				if (e.getPlayer().getLocation().getBlockZ() == plugin.b
+						.getConfig().getDouble("Arnea.1.Z")) {
 					e.setCancelled(true);
 				}
-				if (e.getPlayer().getLocation().getBlockZ() == plugin.nc
-						.getDouble("Arnea.2.Z")) {
+				if (e.getPlayer().getLocation().getBlockZ() == plugin.b
+						.getConfig().getDouble("Arnea.2.Z")) {
 					e.setCancelled(true);
 				}
 			}
-		} else {
-			e.setCancelled(false);
 		}
 	}
 
