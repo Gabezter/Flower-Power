@@ -1,4 +1,4 @@
-package com.gabezter4.Flower_Power;
+package com.gabezter4.Flower_Power.Main;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

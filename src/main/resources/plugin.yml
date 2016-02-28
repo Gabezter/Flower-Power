@@ -1,6 +1,6 @@
 name: Flower-Power
 version: 0.0.9
-main: com.gabezter4.Flower_Power.Main
+main: com.gabezter4.Flower_Power.Main.Main
 commands:
   fp:
     description: Main Command
