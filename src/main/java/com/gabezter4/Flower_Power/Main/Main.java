@@ -1,11 +1,7 @@
 package com.gabezter4.Flower_Power.Main;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,10 +9,11 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.gabezter4.Flower_Power.Arena.Arena;
+import com.gabezter4.Flower_Power.Arena.ScoreBoards;
 
 public class Main extends JavaPlugin {
 
@@ -24,7 +21,8 @@ public class Main extends JavaPlugin {
 	public Run run = new Run(this);
 	public Flower_Gen gen = new Flower_Gen();
 	public ScoreBoards sb = new ScoreBoards();
-	ConfigAccessor b = new ConfigAccessor(this, "arena.yml");
+	public Arena arena = new Arena(this);
+	public ConfigAccessor b = new ConfigAccessor(this, "arena.yml");
 
 	public ArrayList<Player> inGame = new ArrayList<Player>();
 
@@ -334,67 +332,6 @@ public class Main extends JavaPlugin {
 			}
 		}
 
-	}
-
-}
-
-class ConfigAccessor {
-
-	private final String fileName;
-	private final JavaPlugin plugin;
-
-	private File configFile;
-	private FileConfiguration fileConfiguration;
-
-	public ConfigAccessor(JavaPlugin plugin, String fileName) {
-		if (plugin == null)
-			throw new IllegalArgumentException("plugin cannot be null");
-		if (!plugin.isInitialized())
-			throw new IllegalArgumentException("plugin must be initialized");
-		this.plugin = plugin;
-		this.fileName = fileName;
-		File dataFolder = plugin.getDataFolder();
-		if (dataFolder == null)
-			throw new IllegalStateException();
-		this.configFile = new File(plugin.getDataFolder(), fileName);
-	}
-
-	public void reloadConfig() {
-		fileConfiguration = YamlConfiguration.loadConfiguration(configFile);
-
-		// Look for defaults in the jar
-		InputStream defConfigStream = plugin.getResource(fileName);
-		if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration
-					.loadConfiguration(defConfigStream);
-			fileConfiguration.setDefaults(defConfig);
-		}
-	}
-
-	public FileConfiguration getConfig() {
-		if (fileConfiguration == null) {
-			this.reloadConfig();
-		}
-		return fileConfiguration;
-	}
-
-	public void saveConfig() {
-		if (fileConfiguration == null || configFile == null) {
-			return;
-		} else {
-			try {
-				getConfig().save(configFile);
-			} catch (IOException ex) {
-				plugin.getLogger().log(Level.SEVERE,
-						"Could not save config to " + configFile, ex);
-			}
-		}
-	}
-
-	public void saveDefaultConfig() {
-		if (!configFile.exists()) {
-			this.plugin.saveResource(fileName, false);
-		}
 	}
 
 }

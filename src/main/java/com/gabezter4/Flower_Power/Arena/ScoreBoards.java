@@ -1,4 +1,4 @@
-package com.gabezter4.Flower_Power.Main;
+package com.gabezter4.Flower_Power.Arena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,17 +10,19 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
+import com.gabezter4.Flower_Power.Main.Main;
+
 public class ScoreBoards {
 
 	Main plugin;
 
-	ScoreboardManager manager;
-	Scoreboard board;
-	Team playTeam;
-	Team doneTeam;
-	Objective objective;
-	Score score;
-	Score time;
+	public ScoreboardManager manager;
+	public Scoreboard board;
+	public Team playTeam;
+	public Team doneTeam;
+	public Objective objective;
+	public Score score;
+	public Score time;
 
 	public void ScoreBoard(Player player) {
 
@@ -35,7 +37,7 @@ public class ScoreBoards {
 	}
 
 	public void setupScoreboard() {
-		
+
 		manager = Bukkit.getScoreboardManager();
 		board = manager.getNewScoreboard();
 		playTeam = board.registerNewTeam("Playing");
@@ -43,6 +45,6 @@ public class ScoreBoards {
 		objective = board.registerNewObjective("points", "dummy");
 		objective.setDisplayName("Flower Power Points");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-	
+
 	}
 }
